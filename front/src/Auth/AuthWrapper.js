@@ -4,7 +4,7 @@ import  RenderRoutes from "../Components/structure/RenderRoutes";
 const AuthContext =createContext();
 export const AuthData = () => useContext(AuthContext)
 const AuthWrapper = () => {
-    const [user,setUser] =useState({name:'',isAuth:false})
+    const [user,setUser] =useState({name:'',isAuthenticated:true})
     const login = async (userName, password) => {
 
         try {
@@ -21,7 +21,7 @@ const AuthWrapper = () => {
       };
       const logout = () => {
 
-        setUser({...user, isAuthenticated: false,type:''})
+        setUser({...user, isAuthenticated: true})
    }
   return (
     <AuthContext.Provider value={{user, login, logout}}>
