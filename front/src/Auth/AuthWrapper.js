@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import RenderRoutes from "../Components/structure/RenderRoutes";
 
@@ -6,7 +6,16 @@ const AuthContext = createContext();
 export const AuthData = () => useContext(AuthContext);
 
 const AuthWrapper = () => {
-  const [user, setUser] = useState({ name: '', isAuthenticated: false });
+
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('user');
+    return savedUser ? JSON.parse(savedUser) : { name: '', isAuthenticated: false };
+  });
+
+  useEffect(() => {
+  
+    localStorage.setItem('user', JSON.stringify(user));
+  }, [user]);
 
   const login = async (userName, password) => {
     if (userName && password) {
@@ -17,7 +26,7 @@ const AuthWrapper = () => {
         });
         console.log(response);
         console.log('Login successful');
-        setUser({ name: userName, isAuthenticated: true });
+        setUser({ name: userName, isAuthenticated: true, id:response.data.user._id });
       } catch (error) {
         throw new Error(error.response?.data?.msg || "An error occurred during login");
       }
@@ -27,7 +36,8 @@ const AuthWrapper = () => {
   };
 
   const logout = () => {
-    setUser({ ...user, isAuthenticated: false });
+    setUser({ name: '', isAuthenticated: false });
+    localStorage.removeItem('user'); // Remove user from localStorage on logout
   };
 
   return (

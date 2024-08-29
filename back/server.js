@@ -4,6 +4,7 @@ const cors = require('cors');
 const app = express();
 const userRoute = require('./routes/user.route.js');
 const loginRoute = require('./routes/login.route.js');
+const projectsRoute = require('./routes/projects.route.js')
 const port = 8080;
 
 const corsOptions = {
@@ -18,7 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 // Routes
 app.use("/user", userRoute);
 app.use("/login", loginRoute);
-
+app.use("/project", projectsRoute);
 mongoose.connect('mongodb+srv://seif:admin@todolistdb.0nmh9.mongodb.net/?retryWrites=true&w=majority&appName=TodolistDB')
   .then(() => {
     console.log('Connected to MongoDB!');
