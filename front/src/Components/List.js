@@ -84,7 +84,7 @@ const List = () => {
                             </svg>
                         </button>
                         <div className={`${Tasks ? 'block' : 'hidden'} flex flex-col gap-2 ml-14 mt-4`}>
-                            <Link><h1 className='font-montserrat text-lg'>All Tasks</h1></Link>
+                            <Link to='Alltasks'><h1 className='font-montserrat text-lg'>All Tasks</h1></Link>
                             {listtasks.map((task, index) => (
                                 <a key={index} className='font-montserrat text-lg'>Task {task.name}</a>
                             ))}
