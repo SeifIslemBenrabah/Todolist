@@ -12,7 +12,7 @@ const addtask = async(req,res)=>{
         res.status(201).json(task)
     }
     catch(err){
-        res.status(500).json({ msg: err.message }); // Use err.message for consistency
+        res.status(500).json({ msg: err.message });
         console.log('Project creation failed:', err.message);
     }
 }
@@ -21,9 +21,14 @@ const deletetask = async (req,res)=>{
     try{
         const {id} =req.params;
         const task = await Task.findByIdAndDelete(id)
+        
         if(!task){
             return res.status(404).json({msg:'task not found'})
         }
+        await Project.updateOne(
+            { tasks: id },
+            { $pull: { tasks: id } }
+        );
         res.status(200).json({ msg: 'task deleted successfully' });
     }
     catch(err){
@@ -58,20 +63,26 @@ const gettask = async (req,res)=>{
         res.status(500).json({msg: err.message})
     }
 }
-//update task 
-const updatetask = async (req,res)=>{
-    try{
-        const {id} =req.params;
-        const task = await Task.findByIdAndUpdate(id)
-        if(!task){
-            return res.status(404).json({msg:'task not found'})
+// Update task
+const updatetask = async (req, res) => {
+    try {
+        const { id } = req.params; // The task ID to update
+        const taskData = req.body; // The new data for the task
+
+        // Find the task by ID and update it with the new data
+        const task = await Task.findByIdAndUpdate(id, taskData, { new: true });
+
+        if (!task) {
+            return res.status(404).json({ msg: 'Task not found' });
         }
-        res.status(200).json({ msg: 'task updated successfully' });
+
+        // Respond with the updated task
+        res.status(200).json(task);
+    } catch (err) {
+        res.status(500).json({ msg: err.message });
     }
-    catch(err){
-        res.status(500).json({msg :err.message})
-    }
-}
+};
+
 module.exports ={
     updatetask,
     deletetask,

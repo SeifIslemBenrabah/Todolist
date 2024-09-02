@@ -8,7 +8,7 @@ router.post('/', addtask);
 
 // Route to get all
 router.get('/user/:id' , gettasks)
-// Route to get one 
+// Route to get task by project  
 router.get('/:id', gettask);
 //Route to update
 router.put('/:id',updatetask)
